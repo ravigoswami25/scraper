@@ -5,12 +5,13 @@ Steps to execute the app;
 1. Clone form the repository.
        "git clone git@github.com:ravigoswami25/scraper.git"
 
-2. There are 4 branches:
+2. There are 5 branches:
        Branch Name                  Functionality
        a) basic                     Basic implementation of given functionality without any db connections.
        b) DbImplementation          Added mongo db database for saving the information
        c) redis                     Added redis db for in memory caching
        d) prod                      Complete final code
+       e) nestedSearch                For deeper search
 
 3. Switch to any branch using git checkout "branch_name"
         Run "pip install requirements.txt"
