@@ -7,14 +7,14 @@ from in_memory_db import InMemoryDB
 
 app = FastAPI()
 
-# MongoDB connection details
-MONGO_CONNECTION_STRING = "mongodb://username:password@localhost:27017"
-MONGO_DATABASE_NAME = "scraped_data_db"
-MONGO_COLLECTION_NAME = "products"
+# Redis connection details
+REDIS_HOST = "localhost"
+REDIS_PORT = 6379
+REDIS_DB = 0
 
-storage = DataStorage(MONGO_CONNECTION_STRING, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME)
+storage = DataStorage("mongodb://username:password@localhost:27017", "scraped_data_db", "products")
 notifier = Notifier()
-db = InMemoryDB()
+db = InMemoryDB(REDIS_HOST, REDIS_PORT, REDIS_DB)
 
 # Simple authentication using a static token
 API_KEY = "your_static_token"
