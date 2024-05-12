@@ -20,7 +20,7 @@ def authenticate(api_key: str):
 def scrape_website(settings: Settings, api_key: str = Depends(authenticate)):
     scraper = Scraper("https://dentalstall.com/shop/")
     scraped_data = scraper.scrape_catalogue(pages=settings.pages, proxy=settings.proxy)
-
+    print("=================>", scraped_data)
     storage = DataStorage("scraped_data.json")
     notifier = Notifier()
     db = InMemoryDB()
