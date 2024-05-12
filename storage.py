@@ -1,29 +1,22 @@
+from pymongo import MongoClient
 from models import Product
-import json
 
 class DataStorage:
-    def __init__(self, filename):
-        self.filename = filename
+    def __init__(self, connection_string, database_name, collection_name):
+        self.client = MongoClient(connection_string)
+        self.db = self.client[database_name]
+        self.collection = self.db[collection_name]
 
-    def load_from_json(self):
-        try:
-            with open(self.filename, 'r') as file:
-                return json.load(file)
-        except FileNotFoundError:
-            return []
-
-    def save_to_json(self, data):
-        with open(self.filename, 'w') as file:
-            json.dump(data, file)
-
-    def update_storage(self, new_data):
-        current_data = self.load_from_json()
-        current_data.extend(new_data)
-        self.save_to_json(current_data)
+    def save_product(self, product: Product):
+        product_dict = product.dict()
+        existing_product = self.collection.find_one({"product_title": product.product_title})
+        if existing_product:
+            # Update product if already exists
+            self.collection.update_one({"product_title": product.product_title}, {"$set": product_dict})
+        else:
+            # Insert new product
+            self.collection.insert_one(product_dict)
 
     def is_product_cached(self, product: Product):
-        current_data = self.load_from_json()
-        for item in current_data:
-            if item["product_title"] == product.product_title:
-                return True
-        return False
+        existing_product = self.collection.find_one({"product_title": product.product_title})
+        return existing_product is not None
